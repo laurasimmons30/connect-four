@@ -19,9 +19,11 @@ class Board
     all_rows_and_columns
   end
 
-  def drop_piece(column_num, piece)
-    check_board = @game_board.reverse
-    
+  def check_board 
+    game_board.reverse
+  end
+
+  def drop_piece(column_num, piece)    
     # each row, from the bottom up
     check_board.each do |row|
       unless row[column_num].filled?
@@ -30,43 +32,52 @@ class Board
     end
   end
 
-def wins_horizontally?
-  check_board = game_board.reverse
-  # check_array = []
+  def wins_horizontally?
+    check_board.each do |row|
+      return true if check_row_for_win(row)
+    end
+    false
+  end
 
-  # check_board.each do |row|
-  #   row.each do |slot|
-  #     if slot.filled? && check_array == []
-  #       check_array << slot.space
-  #     elsif slot.filled? && slot.space == check_array.first
-  #       check_array << slot.space
-  #     else
-  #       check_array = []
-  #     end
-  #     return true if check_array.length == 4
-  #   end
-  # end
-  check_board.each do |row|
+  def check_row_for_win(row)
     row.each_cons(4) do |slice|
       if slice.length == 4 && slice.map(&:space).uniq.length == 1 && slice.first.space != nil
         return true
       end
     end
+    false
   end
-  false
-end
+
+  def wins_vertically?
+    (0...check_board.length).each do |index|
+      vert = check_board.map { |row| row[index] }
+      return true if check_row_for_win(vert)
+    end
+    false
+  end
+
+  def wins_diagonally?
+    master_check = []
+    (0...game_board.length).to_a.reverse.each do |index|
+      row_index = 0
+      column_index = index
+      check_array = []
+      while game_board[column_index] && game_board[column_index][row_index]
+        check_array << game_board[column_index][row_index]
+        row_index += 1
+        column_index += 1
+      end
+      master_check << check_array if check_array.length >= 4
+    end
+    binding.pry
+  end
+
+  def traverse_diagonally(num1, num2)
+
+  end
 
   def game_won?
-    wins_horizontally?
+    wins_horizontally? || wins_vertically? 
   end
 
-  # def game_board
-    
-  #   [["", "", "", "", "", "", ""],
-  #    ["", "", "", "", "", "", ""],
-  #    ["", "", "", "", "", "", ""],
-  #    ["", "", "", "", "", "", ""],
-  #    ["", "", "", "", "", "", ""],
-  #    ["", "", "", "", "", "", ""]]
-  # end
 end
