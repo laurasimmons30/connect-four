@@ -1,4 +1,4 @@
-require 'space'
+require_relative 'space'
 
 class Board
   attr_accessor :game_board
@@ -16,6 +16,9 @@ class Board
       all_rows_and_columns << row
     end
     all_rows_and_columns
+  end
+
+  def drop_piece(row, piece)
   end
 
   # def game_board
