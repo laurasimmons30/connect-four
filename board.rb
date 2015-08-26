@@ -19,6 +19,7 @@ class Board
     all_rows_and_columns
   end
 
+# faster to check from bottom up
   def check_board 
     game_board.reverse
   end
@@ -56,70 +57,68 @@ class Board
     false
   end
 
-  def diagonal_down_left_bottom_quadrant?
+  def diagonal_bottom_quadrant?(board)
     master_check = []
-    (0...game_board.length).to_a.reverse.each do |index|
+    (0...board.length).to_a.reverse.each do |index|
       row_index = 0
       column_index = index
       check_array = []
-      while game_board[column_index] && game_board[column_index][row_index]
-        check_array << game_board[column_index][row_index]
+      while board[column_index] && board[column_index][row_index]
+        check_array << board[column_index][row_index]
         row_index += 1
         column_index += 1
       end
       master_check << check_array if check_array.length >= 4
     end
-    if master_check.map {|array| check_row_for_win(array)}.include?(true)
-      return true
-    else
-      false
+    master_check.each do |array| 
+      return true if check_row_for_win(array)
     end
+    false
   end
 
-  def diagonal_down_left_top_quadrant?
+  def diagonal_top_quadrant?(board)
     master_check = []
-    (0...game_board.length).to_a.each do |index|
+    (0...board.length).to_a.reverse.each do |index|
       row_index = index
       column_index = 0
       check_array = []
-      while game_board[column_index] && game_board[column_index][row_index]
-        check_array << game_board[column_index][row_index]
+      while board[column_index] && board[column_index][row_index]
+        check_array << board[column_index][row_index]
         row_index += 1
         column_index += 1
       end
       master_check << check_array if check_array.length >= 4
     end
-    if master_check.map {|array| check_row_for_win(array)}.include?(true)
-      return true
-    else
-      false
+    master_check.each do |array| 
+      return true if check_row_for_win(array)
     end
+    false
+  end
+
+  def diagonal_down_right_bottom_quadrant?
+    diagonal_bottom_quadrant?(game_board)
+  end
+
+  def diagonal_down_right_top_quadrant?
+    diagonal_top_quadrant?(game_board)
+  end
+
+  def diagonal_down_left_top_quadrant?
+    reversed_board = game_board.map { |row| row.reverse }
+    diagonal_top_quadrant?(reversed_board)
+  end
+
+  def diagonal_down_left_bottom_quadrant?
+    reversed_board = game_board.map { |row| row.reverse }
+    diagonal_bottom_quadrant?(reversed_board)
   end
 
   def wins_diagonally?
-    diagonal_down_left_bottom_quadrant? || diagonal_down_left_top_quadrant?
-
-    # master_check = []
-    # (0...game_board.length).to_a.reverse.each do |index|
-    #   row_index = 0
-    #   column_index = index
-    #   check_array = []
-    #   while game_board[column_index] && game_board[column_index][row_index]
-    #     check_array << game_board[column_index][row_index]
-    #     row_index += 1
-    #     column_index += 1
-    #   end
-    #   master_check << check_array if check_array.length >= 4
-    # end
-    # if master_check.map {|array| check_row_for_win(array)}.include?(true)
-    #   return true
-    # else
-    #   false
-    # end
+    diagonal_down_right_bottom_quadrant? || diagonal_down_right_top_quadrant? ||  diagonal_down_left_bottom_quadrant? || diagonal_down_left_top_quadrant?
   end
 
   def game_won?
-    wins_horizontally? || wins_vertically? 
+    wins_horizontally? || wins_vertically? || wins_diagonally?
   end
 
 end
