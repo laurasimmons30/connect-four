@@ -200,7 +200,7 @@ describe Board do
   end
 
   context 'the board knows when it wins diagonally' do
-    it 'starting at bottom left, wins if 4 of the same consecutive diagonal pieces' do       
+    it 'wins if 4 of the same consecutive diagonal pieces win left down' do       
       board.drop_piece(0, 'O')
       board.drop_piece(0, 'X')
       board.drop_piece(0, 'X')
@@ -217,6 +217,70 @@ describe Board do
       # [X,X,_,_,_,_,_]
       # [X,O,X,_,_,_,_]
       # [O,O,O,X,_,_,_]
+
+      expect(board.wins_diagonally?).to eq(true)
+    end
+
+    it 'wins if 4 diagonal left down from top left slot' do    
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'X')
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'X')
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'X')
+      board.drop_piece(1, 'O')
+      board.drop_piece(1, 'O')
+      board.drop_piece(1, 'X')
+      board.drop_piece(1, 'O')
+      board.drop_piece(1, 'X')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'X')
+      board.drop_piece(3, 'X')            
+      board.drop_piece(3, 'X')
+      board.drop_piece(3, 'X')            
+      # [X,_,_,_,_,_,_]
+      # [O,X,_,_,_,_,_]
+      # [X,O,X,_,_,_,_]
+      # [O,X,O,X,_,_,_]
+      # [X,O,O,X,_,_,_]
+      # [O,O,O,X,_,_,_]
+
+      expect(board.wins_diagonally?).to eq(true)
+    end
+
+    it 'wins if diagonal left down starting in second top slot' do
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'X')
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'X')
+      board.drop_piece(0, 'O')
+      board.drop_piece(0, 'O')
+      board.drop_piece(1, 'X')
+      board.drop_piece(1, 'O')
+      board.drop_piece(1, 'X')
+      board.drop_piece(1, 'O')
+      board.drop_piece(1, 'X')
+      board.drop_piece(1, 'X')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'O')
+      board.drop_piece(2, 'X')
+      board.drop_piece(2, 'X')
+      board.drop_piece(3, 'O')            
+      board.drop_piece(3, 'X')
+      board.drop_piece(3, 'X')
+      board.drop_piece(3, 'X')
+      board.drop_piece(4, 'X')
+      board.drop_piece(4, 'O')
+      board.drop_piece(4, 'X')                  
+      # [O,X,_,_,_,_,_]
+      # [O,X,X,_,_,_,_]
+      # [X,O,X,X,_,_,_]
+      # [O,X,O,X,X,_,_]
+      # [X,O,O,X,O,_,_]
+      # [O,X,O,O,X,_,_]
 
       expect(board.wins_diagonally?).to eq(true)
     end

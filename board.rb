@@ -56,7 +56,7 @@ class Board
     false
   end
 
-  def wins_diagonally?
+  def diagonal_down_left_bottom_quadrant?
     master_check = []
     (0...game_board.length).to_a.reverse.each do |index|
       row_index = 0
@@ -69,11 +69,53 @@ class Board
       end
       master_check << check_array if check_array.length >= 4
     end
-    binding.pry
+    if master_check.map {|array| check_row_for_win(array)}.include?(true)
+      return true
+    else
+      false
+    end
   end
 
-  def traverse_diagonally(num1, num2)
+  def diagonal_down_left_top_quadrant?
+    master_check = []
+    (0...game_board.length).to_a.each do |index|
+      row_index = index
+      column_index = 0
+      check_array = []
+      while game_board[column_index] && game_board[column_index][row_index]
+        check_array << game_board[column_index][row_index]
+        row_index += 1
+        column_index += 1
+      end
+      master_check << check_array if check_array.length >= 4
+    end
+    if master_check.map {|array| check_row_for_win(array)}.include?(true)
+      return true
+    else
+      false
+    end
+  end
 
+  def wins_diagonally?
+    diagonal_down_left_bottom_quadrant? || diagonal_down_left_top_quadrant?
+
+    # master_check = []
+    # (0...game_board.length).to_a.reverse.each do |index|
+    #   row_index = 0
+    #   column_index = index
+    #   check_array = []
+    #   while game_board[column_index] && game_board[column_index][row_index]
+    #     check_array << game_board[column_index][row_index]
+    #     row_index += 1
+    #     column_index += 1
+    #   end
+    #   master_check << check_array if check_array.length >= 4
+    # end
+    # if master_check.map {|array| check_row_for_win(array)}.include?(true)
+    #   return true
+    # else
+    #   false
+    # end
   end
 
   def game_won?
