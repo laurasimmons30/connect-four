@@ -121,4 +121,29 @@ class Board
     wins_horizontally? || wins_vertically? || wins_diagonally?
   end
 
+  def stalemate?
+  end
+
+  def print_board(board)
+    numbers_array = [0,1,2,3,4,5,6]
+    board.map do |row|
+      display_array = []
+      row.each do |slot|
+        empty_string = " "
+        if slot.space.nil?
+          display_array << empty_string
+        else
+          display_array << slot.space
+        end
+        display_array
+      end
+      puts "|#{display_array.join(" ")}|"
+    end.join("\n")
+    puts "#{"\u2581" * 14}"
+    puts " #{numbers_array.join(' ')}"
+  end
+
 end
+
+board = Board.new
+board.print_board(board.game_board)

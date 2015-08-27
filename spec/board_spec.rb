@@ -333,4 +333,8 @@ describe Board do
       expect(board.game_won?).to eq(true)
     end
   end
+
+  context 'board knows if there ia a stalemate' do
+  
+  end
 end
