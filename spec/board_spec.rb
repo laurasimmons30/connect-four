@@ -66,7 +66,9 @@ describe Board do
       board.game_board.each_cons(6) do |slice|
         expect(slice.length).to eq(6)
       end
+      expect(board.column_full?(0)).to eq(true)
     end
+
   end
 
   context 'the board knows when the game is won horizontally' do

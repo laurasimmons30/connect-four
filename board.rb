@@ -1,5 +1,4 @@
 require_relative 'space'
-require 'pry'
 
 class Board
   attr_accessor :game_board
@@ -25,7 +24,6 @@ class Board
   end
 
   def drop_piece(column_num, piece)    
-    # each row, from the bottom up
     check_board.each do |row|
       unless row[column_num].filled?
         return row[column_num].space = piece 
@@ -122,13 +120,17 @@ class Board
   end
 
   def stalemate?
-    game_board.each do |row|
-      check = row.map do |slot| 
-        slot.space.nil?
-      end
-      return true if check.uniq == [false]
+    index_array = (0...game_board.first.length).to_a
+    index_array.each do |index|
+      return false if !column_full?(index)
     end
-    false
+    true
+  end
+
+  def column_full?(player_input)
+    row_check = game_board.first
+    return false if row_check[player_input.to_i].space.nil?
+    true
   end
 
   def print_board

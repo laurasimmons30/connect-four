@@ -4,9 +4,4 @@ class Player
     @name = name
     @piece_type = piece_type
   end
-
-  def make_move
-    gets.chomp
-  end
-
 end

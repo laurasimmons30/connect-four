@@ -1,6 +1,5 @@
 require_relative 'player'
 require_relative 'board'
-require 'pry'
 
 class Game
   def initialize
@@ -75,6 +74,9 @@ class Game
     @move = get_player_move_choice
     if !(/\A[0-6]\z/.match(@move)) || @move == ''
       puts "Invalid choice, please select column again"
+      get_player_move
+    elsif @board.column_full?(@move)
+      puts "Column full, please select column again"
       get_player_move
     end
     return @move
