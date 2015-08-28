@@ -7,55 +7,54 @@ class Game
     @board = Board.new
   end
 
-  def play
+  def start
+    welcome_prompt
+    play
+  end
+
+  def play 
+    while true
+      player_turn(@player1)
+      break if check_game_won?(@player1)
+
+      player_turn(@player2)
+      break if check_game_won?(@player2)
+    end
+    play_again?
+  end
+
+  def player_turn(player)
+    player_prompt(player)
+    move = get_player_move    
+    player_move(player, move)
+  end
+
+  def welcome_prompt
     puts "Welcome to Ruby Connect Four!"
     puts " "
     player_setup
     puts " "
-    @board.print_board(@board.game_board)
+    @board.print_board
     puts " "
-    
-    while !@board.game_won? 
-      # || !@game.stalemate?
-      # first player move
-      player_prompt(@player1)
-      @move = get_player_move_choice
-
-      unless @move.to_i 
-        puts "Please only use numbers"
-        @move = get_player_move_choice
-      end 
-      
-      player_move(@player1)
-      return player_wins(@player1) if @board.game_won? 
-      # || @game.stalemate?
-      
-      # second player move
-      player_prompt(@player2)
-      @move = get_player_move_choice
-      unless @move.to_i 
-        puts "Please only use numbers"
-        @move = get_player_move_choice
-      end  
-
-      player_move(@player2)
-      return player_wins(@player2) if @board.game_won? 
-      # || @game.stalemate?
-    end
   end
 
   def player_setup
     puts "Player 1, please enter your name"
     name1 = gets.chomp
-    puts "A player name cannot be blank, please enter a name" if name1 == ''
-    @player1 = Player.new(name1,"X")
+    while name1 == ''
+      puts "A player name cannot be blank. Please enter a name"
+      name1 = gets.chomp
+    end
+    @player1 = Player.new(name1,"\e[0;31mX\e[0m")
     puts "Player 1 is #{@player1.name} and will be #{@player1.piece_type}"
-
+    puts ""
     puts "Player 2 please enter your name"
     name2 = gets.chomp
-    puts "player name cannot be blank, please enter a name" if name2 == ''
-
-    @player2 = Player.new(name2, "O")
+    while name2 == '' || name2 == name1
+      puts "Player name cannot be blank or same as #{@player1.name}. Please enter a name"
+      name2 = gets.chomp
+    end
+    @player2 = Player.new(name2, "\e[0;33mO\e[0m") 
     puts "Player 2 is #{@player2.name} and will be #{@player2.piece_type}"
   end
 
@@ -67,32 +66,50 @@ class Game
     gets.chomp
   end
 
-  def player_move(player)
-    @board.drop_piece(@move.to_i, player.piece_type)
-    @board.print_board(@board.game_board)
+  def player_move(player, move)
+    @board.drop_piece(move.to_i, player.piece_type)
+    @board.print_board
+  end
+
+  def get_player_move
+    @move = get_player_move_choice
+    if !(/\A[0-6]\z/.match(@move)) || @move == ''
+      puts "Invalid choice, please select column again"
+      get_player_move
+    end
+    return @move
   end
 
   def player_wins(player)
     puts "#{player.name} Wins!!"
-    play_again?
+    true
+  end
+
+  def stalemate_end
+    puts "Stalemate! No more available moves!"
+    true
+  end
+
+  def check_game_won?(player)
+    if @board.game_won?
+      return player_wins(player)
+    elsif @board.stalemate?
+      return stalemate_end
+    end
   end
 
   def play_again?
     puts "Would you like to play again? (Y/N?)"
     result = gets.chomp.upcase
     if result == "Y"
-      game = Game.new
-      puts game.play
+      @board = Board.new
+      @board.print_board
+      play
     elsif result == "N"
       puts "Thanks for playing!"
     else
       puts "Please enter Y/N "
-      gets.chomp
+      play_again?
     end
   end
 end
-
-game = Game.new
-game.play
-
-# why is the board being shown when I commented out the game?

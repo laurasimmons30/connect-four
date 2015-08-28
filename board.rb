@@ -122,11 +122,18 @@ class Board
   end
 
   def stalemate?
+    game_board.each do |row|
+      check = row.map do |slot| 
+        slot.space.nil?
+      end
+      return true if check.uniq == [false]
+    end
+    false
   end
 
-  def print_board(board)
+  def print_board
     numbers_array = [0,1,2,3,4,5,6]
-    board.map do |row|
+    game_board.map do |row|
       display_array = []
       row.each do |slot|
         empty_string = " "

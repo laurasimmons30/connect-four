@@ -1,5 +1,4 @@
 require 'rspec'
-require 'pry'
 require_relative '../board'
 
 describe Board do 
@@ -335,6 +334,46 @@ describe Board do
   end
 
   context 'board knows if there ia a stalemate' do
-  
+    it 'game ends if there are no available spaces' do
+      2.times {board.drop_piece(0, "X")}
+      2.times {board.drop_piece(0, "O")}
+      board.drop_piece(0, "X")
+      board.drop_piece(0, "O")
+      2.times {board.drop_piece(1, "O")}
+      3.times {board.drop_piece(1, "X")}
+      board.drop_piece(1, "O")
+      board.drop_piece(2, "O")
+      board.drop_piece(2, "X")
+      3.times {board.drop_piece(2, "O")}
+      board.drop_piece(2, "X")
+      2.times {board.drop_piece(3,"X")}
+      board.drop_piece(3, "O")
+      board.drop_piece(3, "X")
+      board.drop_piece(3, "O")
+      board.drop_piece(3, "X")
+      3.times {board.drop_piece(4, "O")}
+      2.times {board.drop_piece(4, "X")}
+      board.drop_piece(4, "O")
+      3.times {board.drop_piece(5, "X")}
+      2.times {board.drop_piece(5, "O")}
+      board.drop_piece(5, "X")
+      2.times {board.drop_piece(6, "O")}
+      3.times {board.drop_piece(6, "X")}
+      board.drop_piece(6, "O")
+      # [O,O,X,X,O,X,O]
+      # [X,X,O,O,X,O,X]
+      # [O,X,O,X,X,O,X]
+      # [O,X,O,O,O,X,X]
+      # [X,O,X,X,O,X,O]
+      # [X,O,O,X,O,X,O]
+
+    expect(board.game_won?).to eq(false)
+    expect(board.stalemate?).to eq(true)
+    end
+
+    it 'game does not end in draw if there are still spaces' do
+      expect(board.stalemate?).to eq(false)
+    end
+
   end
 end
