@@ -1,6 +1,12 @@
 require_relative 'space'
 
 class Board
+  # overall this class is very large. It's well over 100 lines long with well over a dozen methods.
+  # There is enough complexity here that it looks like a section of the code that could be well served
+  # by being refactored into more little objects.
+  
+  # Keep in mind that objects don't always have to be 'things' that we think of as concrete. Like you
+  # could create a BuildBoard object or some object that encapsulates the logic for handling part of the game.
   attr_accessor :game_board
   def initialize
     @game_board = build_game_board
@@ -27,6 +33,7 @@ class Board
     check_board.each do |row|
       unless row[column_num].filled?
         return row[column_num].space = piece 
+        # explicitly returning from methods is a bit of an anti pattern for how you want to write your code.
       end
     end
   end
@@ -41,6 +48,8 @@ class Board
   def check_row_for_win(row)
     row.each_cons(4) do |slice|
       if slice.length == 4 && slice.map(&:space).uniq.length == 1 && slice.first.space != nil
+      # This is the sort of line of logic that is long enough I'd want to break it into methods
+      # to describe what is going on.
         return true
       end
     end
@@ -56,6 +65,7 @@ class Board
   end
 
   def diagonal_bottom_quadrant?(board)
+  # very complex method here. Consider refactoring into smaller sub methods or other objecs.
     master_check = []
     (0...board.length).to_a.reverse.each do |index|
       row_index = 0
@@ -75,6 +85,7 @@ class Board
   end
 
   def diagonal_top_quadrant?(board)
+  # very complex method here. Consider refactoring into smaller sub methods or other objecs.
     master_check = []
     (0...board.length).to_a.reverse.each do |index|
       row_index = index
@@ -134,6 +145,7 @@ class Board
   end
 
   def print_board
+  # very complex method here. Consider refactoring into smaller sub methods or other objecs.
     numbers_array = [0,1,2,3,4,5,6]
     game_board.map do |row|
       display_array = []
