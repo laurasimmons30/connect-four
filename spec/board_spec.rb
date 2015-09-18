@@ -3,6 +3,8 @@ require_relative '../board'
 
 describe Board do 
   let (:board) { Board.new }
+  # its great that you have some specs! Unfortunately since the majority of the code in the app is all in the
+  # Board class as a result this test file is very very large.
 
   it "a board has 6 rows" do
     expect(board.game_board.length).to eq(6)
