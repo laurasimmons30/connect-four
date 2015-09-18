@@ -2,6 +2,8 @@ require_relative 'player'
 require_relative 'board'
 
 class Game
+  # it's tricky but testing your Game class is important. You'd need to figure out some way to mock/stub puts or 
+  # use stdin/stdout to test the external user interface. That would allow you to have tests for this class however.
   def initialize
     @board = Board.new
   end
